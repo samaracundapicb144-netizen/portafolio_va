@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visión Artificial con Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.8rem;
+            font-weight: 200;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .author {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.7;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .author strong {
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '↓';
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Catalog Section */
+        .catalog {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .catalog-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            color: #1a1a1a;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .card-icon {
+            font-size: 5rem;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .card-number {
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 300;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            font-weight: 300;
+        }
+
+        .footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.3rem;
+            }
+
+            .catalog-title {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .catalog {
+                padding: 60px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .card-content {
+                padding: 25px;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Visión Artificial</h1>
+            <p class="subtitle">con Python</p>
+            <div class="author">
+                Realizado por: <strong>Valeria Cundapi</strong>
+            </div>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section class="catalog">
+        <h2 class="catalog-title">Temas del Curso</h2>
+        
+        <div class="cards-grid">
+            <!-- Card 1: Abrir Imagen -->
+            <div class="card">
+                <div class="card-image">
+                    <div class="card-icon">🖼️</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-number">TEMA 01</div>
+                    <h3 class="card-title">Abrir Imagen<h3>
+                    <a href="colores.html">link de prueba</a>
+                    <p class="card-description">
+                        Aprende a cargar y visualizar imágenes utilizando bibliotecas como OpenCV y PIL.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2: Escala de Grises -->
+            <div class="card">
+                <div class="card-image">
+                    <div class="card-icon">⚫</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-number">TEMA 02</div>
+                    <h3 class="card-title">Escala de Grises<h3>
+                    <a href="grises.txt">link de prueba</a>
+                    <p class="card-description">
+                        Convierte imágenes a color en escala de grises para simplificar el procesamiento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 3: Información de Imagen -->
+            <div class="card">
+                <div class="card-image">
+                    <div class="card-icon">ℹ️</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-number">TEMA 03</div>
+                    <h3 class="card-title">Información de Imagen<h3>
+                    <a href="infoimagen.txt">link de prueba</a>
+                    <p class="card-description">
+                        Extrae y analiza propiedades como dimensiones, formato y datos de píxeles.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 4: Ajustar Tamaño -->
+            <div class="card">
+                <div class="card-image">
+                    <div class="card-icon">📐</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-number">TEMA 04</div>
+                    <h3 class="card-title">Ajustar Tamaño<h3>
+                    <a href="ajustar tamaño.txt">link de prueba</a>
+                    <p class="card-description">
+                        Redimensiona imágenes manteniendo o modificando las proporciones según necesites.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Visión Artificial con Python | Valeria Cundapi</p>
+    </footer>
+</body>
+</html>
